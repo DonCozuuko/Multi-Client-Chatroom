@@ -6,9 +6,6 @@
 static const int defaultMessageLen = 1024;
 static const int usernameLen = 12;
 
-void slice(char *str, char *strNew, size_t startIndex, size_t endIndex) {
-    strncpy(strNew, str + startIndex, endIndex - startIndex);
-}
 int main() {
     WSADATA wsa;
     WSAStartup(MAKEWORD(2, 2), &wsa);
@@ -77,13 +74,15 @@ int main() {
 
         // Check for keyboard input (user wants to send a message)
         char message[defaultMessageLen];
-        printf("Message: ");
-        fgets(message, sizeof(message), stdin);
-        message[strcspn(message, "\n")] = '\0';  // remove newline
-        printf("\033[F");  // moves cursor up one line
-        printf("\033[K");  // deletes line with cursor
-        printf("%s: %s", username, message);
-        send(client_socket, message, strlen(message), 0);
+        if (_kbhit()) {
+            printf("Message: ");
+            fgets(message, sizeof(message), stdin);
+            message[strcspn(message, "\n")] = '\0';  // remove newline
+            printf("\033[F");  // moves cursor up one line
+            printf("\033[K");  // deletes line with cursor
+            printf("%s: %s\n", username, message);
+            send(client_socket, message, strlen(message), 0);
+        }
 
         // fd_set readfds;
         // FD_ZERO(&readfds);

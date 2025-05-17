@@ -84,11 +84,12 @@ int main() {
                     // Relay the received message to every client (including the client the message was from)
                     for (int j = 0; j < numClients; j++) {
                         if (clientSockets[j] != clientSockets[i]) {
+                            printf("sent to %s\n", usernameArr[j]);
                             send(clientSockets[j], formattedBuffer, strlen(formattedBuffer), 0);
                         }
-                        else {
-                            send(clientSockets[j], messageBuffer, strlen(messageBuffer), 0);
-                        }
+                        // else {
+                        //     send(clientSockets[j], messageBuffer, strlen(messageBuffer), 0);
+                        // }
                     }
                 }
                 else {

@@ -43,7 +43,7 @@ int main() {
             continue;
         }
         else {
-            send(client_socket, username, strlen(username) - 1, 0);
+            send(client_socket, username, strlen(username), 0);
             printf("\n");
             break;
         }
@@ -56,7 +56,7 @@ int main() {
 
         struct timeval timeout;
         timeout.tv_sec = 0;
-        timeout.tv_usec = 100000;  // 100ms select timeout
+        timeout.tv_usec = 0;  // 0ms select timeout
 
         int activity = select(0, &readfds, NULL, NULL, &timeout);
         if (activity == SOCKET_ERROR) {
@@ -91,45 +91,6 @@ int main() {
             send(client_socket, message, strlen(message), 0);
             noRelayedMsgs = 0;
         }
-
-        // fd_set readfds;
-        // FD_ZERO(&readfds);
-        // FD_SET(client_socket, &readfds);
-        // printf("before select\n");
-        // int activity = select(1, &readfds, NULL, NULL, NULL);
-        // printf("after select\n");
-        // // handle recieved messages relayed from server
-        // printf("Iteration %d", indx);
-        // char recvBuffer[10 + 1 + defaultMessageLen];
-        // if (FD_ISSET(client_socket, &readfds)) {
-        //     printf("I work");
-        //     int bytesReceived = recv(client_socket, recvBuffer, sizeof(recvBuffer) - 1, 0);
-        //     if (bytesReceived > 0) {
-        //         // handle moving the message block and display the formatted string
-    
-        //         printf("%s\n", recvBuffer);
-        //     }
-        // }
-        // // init a string "username,message";
-        // char inputMessage[10 + 1 + defaultMessageLen];
-        // // init username
-        // for (int i = 0; i < strlen(username); i++) {
-        //     inputMessage[i] = username[i];
-        // }
-        // // inputMessage[strlen(username)] = ":";
-        // // parsing the inputted message and formatting it
-        // char message[defaultMessageLen];
-        // printf("Message: ");
-        // fgets(message, sizeof(message), stdin);
-        // // message[strcspn(message, "\n")] = "\0";
-        // strcpy(inputMessage, message);
-        // // Move message block
-        // printf("\033[F");  // moves cursor up one line
-        // printf("\033[K");  // deletes line with cursor
-        // printf("%s: %s", username, inputMessage);
-
-        // send(client_socket, inputMessage, strlen(inputMessage), 0);
-        // indx++;
     }
     closesocket(client_socket);
     WSACleanup();

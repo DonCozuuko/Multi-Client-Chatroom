@@ -53,18 +53,23 @@ int main() {
         // fd set, and to then accept the connection and add them to 
         if (FD_ISSET(server_socket, &readfds)) {
             SOCKET firstClientSocket = accept(server_socket, (struct sockaddr*)&clientObject, &clientObjectLen);
-            if (firstClientSocket != -1) {
-                if (numClients < maxNumClients) {
-                    clientSockets[numClients] = firstClientSocket;
-                    char username[usernameLen];
-                    int receivedMessage = recv(firstClientSocket, username, sizeof(username) - 1, 0);
-                    if (receivedMessage > 0) {
-                        username[receivedMessage] = '\0';
-                        strcpy(usernameArr[numClients], username);
-                        printf("%s has connected\n", username);
-                        firstClientConnected = 1;
-                        numClients++;
+            if (firstClientSocket != -1 && numClients < maxNumClients) {
+                clientSockets[numClients] = firstClientSocket;
+                char username[usernameLen];
+                int formattedSize = usernameLen + 17;
+                char formattedConnectionMsg[formattedSize];
+                int receivedMessage = recv(firstClientSocket, username, sizeof(username) - 1, 0);
+                if (receivedMessage > 0) {
+                    // Add the username to the array
+                    strcpy(usernameArr[numClients], username);
+                    snprintf(formattedConnectionMsg, formattedSize, "<%s has connected>", username);
+                    printf("%s\n", formattedConnectionMsg);
+
+                    for (int i = 0; i < numClients; i++) {
+                        send(clientSockets[i], formattedConnectionMsg, strlen(formattedConnectionMsg), 0);
                     }
+                    firstClientConnected = 1;
+                    numClients++;
                 }
             }            
         }
@@ -88,9 +93,6 @@ int main() {
                             printf("sent to %s\n", usernameArr[j]);
                             send(clientSockets[j], formattedBuffer, strlen(formattedBuffer), 0);
                         }
-                        // else {
-                        //     send(clientSockets[j], messageBuffer, strlen(messageBuffer), 0);
-                        // }
                     }
                 }
                 else {

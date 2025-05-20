@@ -62,7 +62,7 @@ int main() {
                 if (receivedMessage > 0) {
                     // Add the username to the array
                     strcpy(usernameArr[numClients], username);
-                    snprintf(formattedConnectionMsg, formattedSize, "<%s has connected>", username);
+                    snprintf(formattedConnectionMsg, formattedSize, "<%s has Connected>", username);
                     printf("%s\n", formattedConnectionMsg);
 
                     for (int i = 0; i < numClients; i++) {
@@ -97,11 +97,17 @@ int main() {
                 }
                 else {
                     closesocket(clientSockets[i]);
-                    printf("%s has Disconnected\n", usernameArr[i]);
+                    int formattedDisLen = usernameLen + 20;
+                    char disconnectMsgBuff[formattedDisLen];
+                    snprintf(disconnectMsgBuff, formattedDisLen, "<%s has Disconnected>", usernameArr[i]);
+                    printf("has Disconnected\n", usernameArr[i]);
                     for (int j = i; j < numClients - 1; j++) {
                         clientSockets[j] = clientSockets[j + 1];
                     }
                     numClients--;
+                    for (int k = 0; k < numClients; k++) {
+                        send(clientSockets[k], disconnectMsgBuff, strlen(disconnectMsgBuff), 0);
+                    }
                     if (numClients == 0 && firstClientConnected == 1) {
                         break;
                     }

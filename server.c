@@ -76,6 +76,7 @@ int main() {
 
                 int availableMessage = recv(clientSockets[i], messageBuffer, sizeof(messageBuffer) - 1, 0);
                 if (availableMessage > 0) {
+                    // If the message is valid
                     messageBuffer[availableMessage] = '\0';
                     int formattedSize = defaultMessageLen + sizeof(usernameArr[i]);
                     char formattedBuffer[formattedSize];  // The message formatted with the username of the client

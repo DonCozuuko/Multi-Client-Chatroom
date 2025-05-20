@@ -30,7 +30,7 @@ int main() {
 
     char username[usernameLen];
     while (1) {
-        printf("Enter Username: \n");
+        printf("Enter Username: ");
         fgets(username, sizeof(username), stdin);
 
         size_t len = strlen(username);
@@ -44,10 +44,11 @@ int main() {
         }
         else {
             send(client_socket, username, strlen(username) - 1, 0);
+            printf("\n");
             break;
         }
     }
-    int indx = 1;
+    int noRelayedMsgs = 0;
     while (1) {
         fd_set readfds;
         FD_ZERO(&readfds);
@@ -68,20 +69,27 @@ int main() {
             int bytesReceived = recv(client_socket, recvBuffer, sizeof(recvBuffer) - 1, 0);
             if (bytesReceived > 0) {
                 recvBuffer[bytesReceived] = '\0';
+                printf("\r\033[K");
+                fflush(stdout);
                 printf("%s\n", recvBuffer);
+                noRelayedMsgs = 0;
             }
         }
 
         // Check for keyboard input (user wants to send a message)
         char message[defaultMessageLen];
-        if (_kbhit()) {
+        if (noRelayedMsgs == 0) {
             printf("Message: ");
+            noRelayedMsgs = 1;
+        }
+        if (_kbhit()) {
             fgets(message, sizeof(message), stdin);
             message[strcspn(message, "\n")] = '\0';  // remove newline
             printf("\033[F");  // moves cursor up one line
             printf("\033[K");  // deletes line with cursor
             printf("%s: %s\n", username, message);
             send(client_socket, message, strlen(message), 0);
+            noRelayedMsgs = 0;
         }
 
         // fd_set readfds;

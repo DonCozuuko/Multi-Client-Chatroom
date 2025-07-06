@@ -6,7 +6,8 @@ My implementation of a **SIMPLE** real-time communication system in C. It allows
 - All built in C, so there are a lot of exploitable things you could do on the client side (I made sure to include a shit ton of buffer handling bad practices).
 - It works.
 ## Demo
-![[2025-07-06 14-36-46 1.mp4]]
+https://github.com/user-attachments/assets/60cb4c4e-d5e4-4000-8a71-4bbc22355f09
+
 ## Quick Start
 - Must open at least 2 terminal instances, one for the server and at least one for the clients.
 ```

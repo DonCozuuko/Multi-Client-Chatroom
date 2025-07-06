@@ -100,7 +100,7 @@ int main() {
                     int formattedDisLen = usernameLen + 20;
                     char disconnectMsgBuff[formattedDisLen];
                     snprintf(disconnectMsgBuff, formattedDisLen, "<%s has Disconnected>", usernameArr[i]);
-                    printf("has Disconnected\n", usernameArr[i]);
+                    printf("%s has Disconnected\n", usernameArr[i]);
                     for (int j = i; j < numClients - 1; j++) {
                         clientSockets[j] = clientSockets[j + 1];
                     }

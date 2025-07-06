@@ -1,2 +1,2 @@
 main:
-	gcc server.c -o s -lws2_32 && gcc client.c -o c -lws2_32
+	gcc server.c -o server -lws2_32 && gcc client.c -o client -lws2_32

@@ -10,6 +10,7 @@ int main() {
     WSAStartup(MAKEWORD(2, 2), &wsa);
 
     printf("START OF LOG\n");
+    printf("<----Listening for Connections---->\n");
     SOCKET server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -100,7 +101,7 @@ int main() {
                     int formattedDisLen = usernameLen + 20;
                     char disconnectMsgBuff[formattedDisLen];
                     snprintf(disconnectMsgBuff, formattedDisLen, "<%s has Disconnected>", usernameArr[i]);
-                    printf("%s has Disconnected\n", usernameArr[i]);
+                    printf("<%s has Disconnected>\n", usernameArr[i]);
                     for (int j = i; j < numClients - 1; j++) {
                         clientSockets[j] = clientSockets[j + 1];
                     }
